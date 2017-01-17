@@ -1,10 +1,11 @@
 mod card;
+mod deck;
+
+extern crate rand;
 
 fn main() {
-    let card1: card::Card = card::Card::Face(card::Face {
-        suit: card::Suit::Hearts,
-        symbol: card::Symbol::Seven,
-    });
-    let card2: card::Card = card::Card::Trump(card::Trump::Two);
-    println!("{} et {}", card1, card2);
+    let mut deck = deck::new_deck();
+    for card in deck {
+        println!("{}", card)
+    }
 }

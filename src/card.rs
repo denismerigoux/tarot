@@ -1,5 +1,6 @@
 use std::fmt;
 
+#[derive(Copy, Clone)]
 pub enum Suit {
     Clubs,
     Diamonds,
@@ -18,6 +19,13 @@ impl fmt::Display for Suit {
     }
 }
 
+impl Suit {
+    pub fn values() -> Vec<Suit> {
+        vec![Suit::Clubs, Suit::Diamonds, Suit::Hearts, Suit::Spades]
+    }
+}
+
+#[derive(Copy, Clone)]
 pub enum Symbol {
     Ace,
     Two,
@@ -56,11 +64,32 @@ impl fmt::Display for Symbol {
     }
 }
 
+impl Symbol {
+    pub fn values() -> Vec<Symbol> {
+        vec![Symbol::Ace,
+             Symbol::Two,
+             Symbol::Three,
+             Symbol::Four,
+             Symbol::Five,
+             Symbol::Six,
+             Symbol::Seven,
+             Symbol::Eight,
+             Symbol::Nine,
+             Symbol::Ten,
+             Symbol::Jack,
+             Symbol::Knight,
+             Symbol::Queen,
+             Symbol::King]
+    }
+}
+
+#[derive(Copy, Clone)]
 pub struct Face {
     pub suit: Suit,
     pub symbol: Symbol,
 }
 
+#[derive(Copy, Clone)]
 pub enum Trump {
     One,
     Two,
@@ -113,6 +142,33 @@ impl fmt::Display for Trump {
     }
 }
 
+impl Trump {
+    pub fn values() -> Vec<Trump> {
+        vec![Trump::One,
+             Trump::Two,
+             Trump::Three,
+             Trump::Four,
+             Trump::Five,
+             Trump::Six,
+             Trump::Seven,
+             Trump::Eight,
+             Trump::Nine,
+             Trump::Ten,
+             Trump::Eleven,
+             Trump::Twelve,
+             Trump::Thirteen,
+             Trump::Fourteen,
+             Trump::Fifteen,
+             Trump::Sixteen,
+             Trump::Seventeen,
+             Trump::Eighteen,
+             Trump::Nineteen,
+             Trump::Twenty,
+             Trump::TwentyOne]
+    }
+}
+
+#[derive(Copy, Clone)]
 pub enum Card {
     Face(Face),
     Trump(Trump),
@@ -122,7 +178,7 @@ pub enum Card {
 impl fmt::Display for Card {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
-            &Card::Fool => write!(f, "Excuse"),
+            &Card::Fool => write!(f, "excuse"),
             &Card::Face(Face { ref suit, ref symbol }) => write!(f, "{} de {}", symbol, suit),
             &Card::Trump(Trump::One) => write!(f, "petit"),
             &Card::Trump(ref trump) => write!(f, "{} d'atout", trump),
