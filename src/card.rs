@@ -1,6 +1,7 @@
 use std::fmt;
+use std::cmp::Ordering;
 
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, Eq, PartialEq, PartialOrd, Ord)]
 pub enum Suit {
     Clubs,
     Diamonds,
@@ -25,7 +26,7 @@ impl Suit {
     }
 }
 
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, Eq, PartialEq, PartialOrd, Ord)]
 pub enum Symbol {
     Ace,
     Two,
@@ -83,13 +84,19 @@ impl Symbol {
     }
 }
 
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, Eq, PartialEq, PartialOrd)]
 pub struct Face {
     pub suit: Suit,
     pub symbol: Symbol,
 }
 
-#[derive(Copy, Clone)]
+impl Ord for Face {
+    fn cmp(&self, face: &Face) -> Ordering {
+        self.symbol.cmp(&face.symbol)
+    }
+}
+
+#[derive(Copy, Clone, Eq, PartialEq, PartialOrd, Ord)]
 pub enum Trump {
     One,
     Two,
@@ -168,7 +175,7 @@ impl Trump {
     }
 }
 
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, Eq, PartialEq, PartialOrd)]
 pub enum Card {
     Face(Face),
     Trump(Trump),
@@ -182,6 +189,19 @@ impl fmt::Display for Card {
             &Card::Face(Face { ref suit, ref symbol }) => write!(f, "{} de {}", symbol, suit),
             &Card::Trump(Trump::One) => write!(f, "petit"),
             &Card::Trump(ref trump) => write!(f, "{} d'atout", trump),
+        }
+    }
+}
+
+impl Ord for Card {
+    fn cmp(&self, card: &Card) -> Ordering {
+        match (self, card) {
+            (&Card::Fool, _) => Ordering::Less,
+            (_, &Card::Fool) => Ordering::Greater,
+            (&Card::Trump(_), &Card::Face(_)) => Ordering::Greater,
+            (&Card::Face(_), &Card::Trump(_)) => Ordering::Less,
+            (&Card::Trump(trump1), &Card::Trump(trump2)) => trump1.cmp(&trump2),
+            (&Card::Face(face1), &Card::Face(face2)) => face1.cmp(&face2),
         }
     }
 }
