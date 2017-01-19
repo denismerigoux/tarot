@@ -17,7 +17,7 @@ fn main() {
         println!("{}", card);
     }
     for &(number, ref hand) in hands.into_iter() {
-        println!("-> Cartes du joueur {} ({}):", number + 1, hand.len());
+        println!("-> Cartes du joueur {}:", number + 1);
         for card in hand.iter() {
             println!("{}", card);
         }

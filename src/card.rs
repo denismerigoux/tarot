@@ -1,7 +1,7 @@
 use std::fmt;
 use std::cmp::Ordering;
 
-#[derive(Copy, Clone, Eq, PartialEq, PartialOrd, Ord)]
+#[derive(Debug, Copy, Clone, Eq, PartialEq, PartialOrd, Ord)]
 pub enum Suit {
     Clubs,
     Diamonds,
@@ -26,7 +26,7 @@ impl Suit {
     }
 }
 
-#[derive(Copy, Clone, Eq, PartialEq, PartialOrd, Ord)]
+#[derive(Debug, Copy, Clone, Eq, PartialEq, PartialOrd, Ord)]
 pub enum Symbol {
     Ace,
     Two,
@@ -84,7 +84,7 @@ impl Symbol {
     }
 }
 
-#[derive(Copy, Clone, Eq, PartialEq, PartialOrd)]
+#[derive(Debug, Copy, Clone, Eq, PartialEq, PartialOrd)]
 pub struct Face {
     pub suit: Suit,
     pub symbol: Symbol,
@@ -93,20 +93,14 @@ pub struct Face {
 impl Ord for Face {
     fn cmp(&self, face: &Face) -> Ordering {
         match self.symbol.cmp(&face.symbol) {
-            Ordering::Equal => {
-                let result = self.suit.cmp(&face.suit);
-                if result == Ordering::Equal {
-                    println!("Equal cards!");
-                }
-                result
-            }
+            Ordering::Equal => self.suit.cmp(&face.suit),
             Ordering::Less => Ordering::Less,
             Ordering::Greater => Ordering::Greater,
         }
     }
 }
 
-#[derive(Copy, Clone, Eq, PartialEq, PartialOrd, Ord)]
+#[derive(Debug, Copy, Clone, Eq, PartialEq, PartialOrd, Ord)]
 pub enum Trump {
     One,
     Two,
@@ -185,7 +179,7 @@ impl Trump {
     }
 }
 
-#[derive(Copy, Clone, Eq, PartialEq, PartialOrd)]
+#[derive(Debug, Copy, Clone, Eq, PartialEq, PartialOrd)]
 pub enum Card {
     Face(Face),
     Trump(Trump),
