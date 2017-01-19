@@ -92,7 +92,17 @@ pub struct Face {
 
 impl Ord for Face {
     fn cmp(&self, face: &Face) -> Ordering {
-        self.symbol.cmp(&face.symbol)
+        match self.symbol.cmp(&face.symbol) {
+            Ordering::Equal => {
+                let result = self.suit.cmp(&face.suit);
+                if result == Ordering::Equal {
+                    println!("Equal cards!");
+                }
+                result
+            }
+            Ordering::Less => Ordering::Less,
+            Ordering::Greater => Ordering::Greater,
+        }
     }
 }
 

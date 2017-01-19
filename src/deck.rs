@@ -1,17 +1,14 @@
 use card;
+use params;
 use rand::{thread_rng, Rng};
 use std::collections::BTreeSet;
 
-pub const DECK_SIZE: usize = 78;
-pub const NUMBER_OF_PLAYERS: usize = 4;
-pub const CARDS_PER_DISTRIBUTION: usize = 3;
-pub type Deck = [card::Card; DECK_SIZE];
-pub type Hand = BTreeSet<card::Card>;
-
+pub type Deck = [card::Card; params::DECK_SIZE];
+pub type Hand = (i32, BTreeSet<card::Card>);
 
 // Creates a deck_size cards tarot deck, shuffled
 pub fn new_deck() -> Deck {
-    let mut deck: [card::Card; DECK_SIZE] = [card::Card::Fool; DECK_SIZE];
+    let mut deck: [card::Card; params::DECK_SIZE] = [card::Card::Fool; params::DECK_SIZE];
     let mut counter = 0;
     for suit in card::Suit::values() {
         for symbol in card::Symbol::values() {
@@ -33,16 +30,18 @@ pub fn new_deck() -> Deck {
 }
 
 // Distributes the deck between the four players and the dog
-pub fn distribute_cards(deck: Deck) -> (Hand, [Hand; 4]) {
-    let mut dog: Hand = BTreeSet::new();
-    let mut hands: [Hand; NUMBER_OF_PLAYERS] =
-        [BTreeSet::new(), BTreeSet::new(), BTreeSet::new(), BTreeSet::new()];
-    for i in 0..(DECK_SIZE - 1) {
-        if i <= 5 {
+pub fn distribute_cards(deck: Deck) -> (Hand, [Hand; params::NUMBER_OF_PLAYERS]) {
+    let (_, mut dog): Hand = (-1, BTreeSet::new());
+    let mut hands: [Hand; params::NUMBER_OF_PLAYERS] =
+        [(0, BTreeSet::new()), (1, BTreeSet::new()), (2, BTreeSet::new()), (3, BTreeSet::new())];
+    for i in 0..params::DECK_SIZE {
+        if i < params::DOG_SIZE {
             dog.insert(deck[i]);
         } else {
-            hands[(i / CARDS_PER_DISTRIBUTION) % NUMBER_OF_PLAYERS].insert(deck[i]);
+            hands[(i / params::CARDS_PER_DISTRIBUTION) % params::NUMBER_OF_PLAYERS]
+                .1
+                .insert(deck[i]);
         }
     }
-    (dog, hands)
+    ((-1, dog), hands)
 }
