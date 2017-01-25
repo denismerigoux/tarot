@@ -200,6 +200,7 @@ impl fmt::Display for Card {
 impl Ord for Card {
     fn cmp(&self, card: &Card) -> Ordering {
         match (self, card) {
+            (&Card::Fool, &Card::Fool) => Ordering::Equal,
             (&Card::Fool, _) => Ordering::Less,
             (_, &Card::Fool) => Ordering::Greater,
             (&Card::Trump(_), &Card::Face(_)) => Ordering::Greater,

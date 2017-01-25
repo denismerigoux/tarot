@@ -1,0 +1,177 @@
+-> Cartes du chien :
+as de carreau
+5 de carreau
+cavalier de trèfle
+4 d'atout
+7 d'atout
+10 d'atout
+-> Cartes du joueur 0:
+as de cœur
+as de pique
+2 de pique
+3 de cœur
+3 de pique
+4 de carreau
+4 de pique
+6 de carreau
+6 de pique
+7 de pique
+8 de carreau
+9 de trèfle
+valet de trèfle
+valet de pique
+cavalier de carreau
+5 d'atout
+12 d'atout
+14 d'atout
+-> Cartes du joueur 1:
+excuse
+2 de trèfle
+2 de cœur
+5 de trèfle
+7 de cœur
+8 de cœur
+9 de pique
+10 de trèfle
+10 de carreau
+valet de cœur
+cavalier de cœur
+dame de trèfle
+roi de cœur
+petit
+8 d'atout
+9 d'atout
+16 d'atout
+19 d'atout
+-> Cartes du joueur 2:
+3 de trèfle
+3 de carreau
+4 de trèfle
+4 de cœur
+5 de cœur
+6 de trèfle
+7 de trèfle
+9 de carreau
+10 de pique
+valet de carreau
+dame de carreau
+dame de pique
+roi de pique
+2 d'atout
+6 d'atout
+11 d'atout
+15 d'atout
+21 d'atout
+-> Cartes du joueur 3:
+as de trèfle
+2 de carreau
+5 de pique
+6 de cœur
+7 de carreau
+8 de trèfle
+8 de pique
+9 de cœur
+10 de cœur
+cavalier de pique
+dame de cœur
+roi de trèfle
+roi de carreau
+3 d'atout
+13 d'atout
+17 d'atout
+18 d'atout
+20 d'atout
+===== Début de la partie ! =====
+Le joueur 0 joue as de cœur.
+Le joueur 1 joue 2 de cœur.
+Le joueur 2 joue 4 de cœur.
+Le joueur 3 joue 6 de cœur.
+>>>>> Le joueur 3 remporte le pli avec la carte 6 de cœur ! <<<<<
+Le joueur 3 joue as de trèfle.
+Le joueur 0 joue 9 de trèfle.
+Le joueur 1 joue 2 de trèfle.
+Le joueur 2 joue 3 de trèfle.
+>>>>> Le joueur 0 remporte le pli avec la carte 9 de trèfle ! <<<<<
+Le joueur 0 joue as de pique.
+Le joueur 1 joue 9 de pique.
+Le joueur 2 joue 10 de pique.
+Le joueur 3 joue 5 de pique.
+>>>>> Le joueur 2 remporte le pli avec la carte 10 de pique ! <<<<<
+Le joueur 2 joue 3 de carreau.
+Le joueur 3 joue 2 de carreau.
+Le joueur 0 joue 4 de carreau.
+Le joueur 1 joue 10 de carreau.
+>>>>> Le joueur 1 remporte le pli avec la carte 10 de carreau ! <<<<<
+Le joueur 1 joue excuse.
+Le joueur 2 joue 4 de trèfle.
+Le joueur 3 joue 8 de trèfle.
+Le joueur 0 joue valet de trèfle.
+>>>>> Le joueur 0 remporte le pli avec la carte valet de trèfle ! <<<<<
+Le joueur 0 joue 2 de pique.
+Le joueur 1 joue petit.
+Le joueur 2 joue dame de pique.
+Le joueur 3 joue 8 de pique.
+>>>>> Le joueur 1 remporte le pli avec la carte petit ! <<<<<
+Le joueur 1 joue 5 de trèfle.
+Le joueur 2 joue 6 de trèfle.
+Le joueur 3 joue roi de trèfle.
+Le joueur 0 joue 5 d'atout.
+>>>>> Le joueur 0 remporte le pli avec la carte 5 d'atout ! <<<<<
+Le joueur 0 joue 3 de cœur.
+Le joueur 1 joue 7 de cœur.
+Le joueur 2 joue 5 de cœur.
+Le joueur 3 joue 9 de cœur.
+>>>>> Le joueur 3 remporte le pli avec la carte 9 de cœur ! <<<<<
+Le joueur 3 joue 7 de carreau.
+Le joueur 0 joue 6 de carreau.
+Le joueur 1 joue 8 d'atout.
+Le joueur 2 joue 9 de carreau.
+>>>>> Le joueur 1 remporte le pli avec la carte 8 d'atout ! <<<<<
+Le joueur 1 joue 8 de cœur.
+Le joueur 2 joue 2 d'atout.
+Le joueur 3 joue 10 de cœur.
+Le joueur 0 joue 12 d'atout.
+>>>>> Le joueur 0 remporte le pli avec la carte 12 d'atout ! <<<<<
+Le joueur 0 joue 3 de pique.
+Le joueur 1 joue 9 d'atout.
+Le joueur 2 joue roi de pique.
+Le joueur 3 joue cavalier de pique.
+>>>>> Le joueur 1 remporte le pli avec la carte 9 d'atout ! <<<<<
+Le joueur 1 joue 10 de trèfle.
+Le joueur 2 joue 7 de trèfle.
+Le joueur 3 joue 3 d'atout.
+Le joueur 0 joue 14 d'atout.
+>>>>> Le joueur 0 remporte le pli avec la carte 14 d'atout ! <<<<<
+Le joueur 0 joue 4 de pique.
+Le joueur 1 joue 16 d'atout.
+Le joueur 2 joue 6 d'atout.
+Le joueur 3 joue 13 d'atout.
+>>>>> Le joueur 1 remporte le pli avec la carte 16 d'atout ! <<<<<
+Le joueur 1 joue valet de cœur.
+Le joueur 2 joue 11 d'atout.
+Le joueur 3 joue dame de cœur.
+Le joueur 0 joue 6 de pique.
+>>>>> Le joueur 2 remporte le pli avec la carte 11 d'atout ! <<<<<
+Le joueur 2 joue valet de carreau.
+Le joueur 3 joue roi de carreau.
+Le joueur 0 joue 8 de carreau.
+Le joueur 1 joue 19 d'atout.
+>>>>> Le joueur 1 remporte le pli avec la carte 19 d'atout ! <<<<<
+Le joueur 1 joue cavalier de cœur.
+Le joueur 2 joue 15 d'atout.
+Le joueur 3 joue 17 d'atout.
+Le joueur 0 joue 7 de pique.
+>>>>> Le joueur 3 remporte le pli avec la carte 17 d'atout ! <<<<<
+Le joueur 3 joue 18 d'atout.
+plus haut atout joué: 18
+Le joueur 0 joue valet de pique.
+plus haut atout joué: 18
+Le joueur 1 joue dame de trèfle.
+plus haut atout joué: 18
+Le joueur 2 joue 21 d'atout.
+>>>>> Le joueur 2 remporte le pli avec la carte 21 d'atout ! <<<<<
+Le joueur 2 joue dame de carreau.
+Le joueur 3 joue 20 d'atout.
+Le joueur 0 joue cavalier de carreau.
+Le joueur 1 joue roi de cœur.
+>>>>> Le joueur 3 remporte le pli avec la carte 20 d'atout ! <<<<<
