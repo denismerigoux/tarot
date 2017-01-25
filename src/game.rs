@@ -101,7 +101,10 @@ fn valid_cards(player: &Player, cards_played: &Heap) -> deck::Hand {
                 // If it's a trump you can play only higher trumps,
                 // otherwise lower trumps, otherwise anything
                 card::Card::Trump(_) => {
-                    let max_trump_played = max_trump(cards_played);
+                    let max_trump_played = match max_trump(cards_played) {
+                        Some(trump) => trump,
+                        None => panic!("this shouldn't happen"),
+                    };
                     let higher_trumps: deck::Hand = valid_hand.iter()
                         .map(|&card| card.clone())
                         .filter(|&card| match card {
@@ -143,19 +146,38 @@ fn valid_cards(player: &Player, cards_played: &Heap) -> deck::Hand {
                     if !same_suit_faces.is_empty() {
                         return same_suit_faces;
                     } else {
-                        // Play a trump
-                        let trumps: deck::Hand = valid_hand.iter()
+                        // Play a trump higher than those alreay played
+                        let max_trump_played = max_trump(cards_played);
+                        let valid_trumps: deck::Hand = valid_hand.iter()
                             .map(|&card| card.clone())
                             .filter(|&card| match card {
-                                card::Card::Trump(_) => true,
+                                card::Card::Trump(trump1) => {
+                                    match max_trump_played {
+                                        Some(trump2) => trump1 > trump2,
+                                        None => true,
+                                    }
+                                }
                                 _ => false,
                             })
                             .collect();
-                        if !trumps.is_empty() {
-                            return trumps;
+                        if !valid_trumps.is_empty() {
+                            return valid_trumps;
                         } else {
-                            //Play anything
-                            return valid_hand;
+                            // Play any other trump
+                            let trumps: deck::Hand = valid_hand.iter()
+                                .map(|&card| card.clone())
+                                .filter(|&card| match card {
+                                    card::Card::Trump(_) => true,
+                                    _ => false,
+                                })
+                                .collect();
+                            if !trumps.is_empty() {
+                                return trumps;
+                            } else {
+
+                                //Play anything
+                                return valid_hand;
+                            }
                         }
                     }
                 }
@@ -165,7 +187,7 @@ fn valid_cards(player: &Player, cards_played: &Heap) -> deck::Hand {
 }
 
 // Returns the max trump in a heap of played cards, panics if no trump
-fn max_trump(cards_played: &Heap) -> card::Trump {
+fn max_trump(cards_played: &Heap) -> Option<card::Trump> {
     let mut max_trump: Option<card::Trump> = None;
     for &(card, _) in cards_played.iter() {
         match card {
@@ -182,10 +204,7 @@ fn max_trump(cards_played: &Heap) -> card::Trump {
             _ => (),
         }
     }
-    match max_trump {
-        None => panic!("no trump, cannot find max"),
-        Some(max) => max,
-    }
+    max_trump
 }
 
 // Select a card to play among the valid cards
