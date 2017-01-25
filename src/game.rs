@@ -53,7 +53,7 @@ pub fn start_game(_: &deck::Hand, mut players: &mut Vec<Player>) {
             play_card(player, &mut cards_played)
         }
         // Decide who has won
-        starting_player_id = winning_player(&cards_played);
+        starting_player_id = winning_player(&mut cards_played);
     }
 }
 
@@ -65,17 +65,24 @@ fn sort_by_playing_order(mut players: &mut Vec<Player>, starting_player_id: i32)
 }
 
 fn play_card(player: &mut Player, cards_played: &mut Heap) {
-    unimplemented!();
+    let valid_cards = valid_cards(&player.hand, cards_played);
+    let card = select_card(player, &valid_cards, cards_played);
+    player.hand.remove(&card);
+    cards_played.push((card, player.id));
 }
 
 fn valid_cards(hand: &deck::Hand, cards_played: &Heap) -> deck::Hand {
     unimplemented!();
 }
 
-fn select_card(player: &Player, cards_played: &Heap) -> card::Card {
+fn select_card(player: &Player, valid_cards: &deck::Hand, cards_played: &Heap) -> card::Card {
     unimplemented!();
 }
 
-fn winning_player(cards: &Heap) -> i32 {
-    unimplemented!();
+fn winning_player(cards: &mut Heap) -> i32 {
+    cards.sort_by(|&(card1, _), &(card2, _)| card1.cmp(&card2));
+    match cards.first() {
+        Some(&(_, id)) => id,
+        None => panic!("no cards have been played"),
+    }
 }
