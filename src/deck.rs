@@ -30,6 +30,9 @@ pub fn new_deck() -> Deck {
 pub fn distribute_cards(deck: &Deck) -> (Hand, Vec<Hand>) {
     let mut dog: Hand = BTreeSet::new();
     let mut hands: Vec<Hand> = Vec::new();
+    for _ in 0..(params::NUMBER_OF_PLAYERS) {
+        hands.push(BTreeSet::new())
+    }
     for i in 0..deck.len() {
         if i < params::DOG_SIZE {
             dog.insert(deck[i]);
