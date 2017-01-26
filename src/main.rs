@@ -3,6 +3,7 @@ mod deck;
 mod params;
 mod game;
 mod ai;
+mod scoring;
 
 extern crate rand;
 
@@ -26,5 +27,15 @@ fn main() {
             println!("{}", card);
         }
     }
-    game::start_game(&mut dog, &mut players);
+    let game = game::play_game(&mut dog, &mut players);
+    println!("===== Fin de la partie ! =====");
+    let game_scores = scoring::compute_game_scores(&game);
+    println!("Score de l'attaque ({}) : {} ({} bouts), score de la défense : {}",
+             match players.iter().find(|player| player.id == game.taker_id) {
+                 None => panic!("cannot find the player who won the round"),
+                 Some(player) => &player.name,
+             },
+             game_scores.attack_score,
+             game_scores.attack_bouts_number,
+             game_scores.defense_score);
 }

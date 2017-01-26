@@ -42,7 +42,8 @@ pub fn initialize_players(hands: &mut Vec<deck::Hand>, names: &mut Vec<String>) 
     players
 }
 
-pub fn start_game(mut dog: &mut deck::Hand, mut players: &mut Vec<Player>) {
+//Plays the game and returns the tuple (attack_heap,defense_heap)
+pub fn play_game(mut dog: &mut deck::Hand, mut players: &mut Vec<Player>) -> Game {
     let cards_per_player = players[0].hand.len();
     // Check if all players have same number of cards
     for i in 1..params::NUMBER_OF_PLAYERS {
@@ -123,25 +124,7 @@ pub fn start_game(mut dog: &mut deck::Hand, mut players: &mut Vec<Player>) {
             }
         }
     }
-
-    println!("-> Cartes gagnées par l'attaque");
-    for &(card, id) in game.attack_heap.iter() {
-        println!("{} ({})",
-                 card,
-                 match players.iter().find(|player| player.id == id) {
-                     None => panic!("cannot find the player who won the round"),
-                     Some(player) => &player.name,
-                 });
-    }
-    println!("-> Cartes gagnées par la défense");
-    for &(card, id) in game.defense_heap.iter() {
-        println!("{} ({})",
-                 card,
-                 match players.iter().find(|player| player.id == id) {
-                     None => panic!("cannot find the player who won the round"),
-                     Some(player) => &player.name,
-                 });
-    }
+    game
 }
 
 // Keeps the order of the game but puts starting player first
