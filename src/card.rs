@@ -210,3 +210,41 @@ impl Ord for Card {
         }
     }
 }
+
+pub fn potential_value(&card: &Card) -> i32 {
+    match card {
+        Card::Fool => 100,
+        Card::Trump(Trump::One) => 100,
+        Card::Trump(Trump::TwentyOne) => 100,
+        Card::Face(Face { suit: _, symbol: Symbol::Jack }) => 10,
+        Card::Face(Face { suit: _, symbol: Symbol::Knight }) => 20,
+        Card::Face(Face { suit: _, symbol: Symbol::Queen }) => 30,
+        Card::Face(Face { suit: _, symbol: Symbol::King }) => 40,
+        Card::Trump(trump) => {
+            10 +
+            match trump {
+                Trump::Two => 2,
+                Trump::Three => 3,
+                Trump::Four => 4,
+                Trump::Five => 5,
+                Trump::Six => 6,
+                Trump::Seven => 7,
+                Trump::Eight => 8,
+                Trump::Nine => 9,
+                Trump::Ten => 10,
+                Trump::Eleven => 11,
+                Trump::Twelve => 12,
+                Trump::Thirteen => 13,
+                Trump::Fourteen => 14,
+                Trump::Fifteen => 15,
+                Trump::Sixteen => 16,
+                Trump::Seventeen => 17,
+                Trump::Eighteen => 18,
+                Trump::Nineteen => 19,
+                Trump::Twenty => 20,
+                _ => 100,
+            }
+        }
+        _ => 0,
+    }
+}

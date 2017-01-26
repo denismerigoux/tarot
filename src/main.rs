@@ -2,6 +2,7 @@ mod card;
 mod deck;
 mod params;
 mod game;
+mod ai;
 
 extern crate rand;
 
@@ -13,17 +14,17 @@ fn main() {
     let mut names: Vec<String> =
         vec!["A".to_string(), "B".to_string(), "C".to_string(), "D".to_string()];
     let deck = deck::new_deck();
-    let (dog, mut hands) = deck::distribute_cards(&deck);
+    let (mut dog, mut hands) = deck::distribute_cards(&deck);
     let mut players = game::initialize_players(&mut hands, &mut names);
     println!("-> Cartes du chien :");
     for card in dog.iter() {
         println!("{}", card);
     }
     for player in players.iter() {
-        println!("-> Cartes du joueur {}:", player.id);
+        println!("-> Cartes du joueur {}:", player.name);
         for card in player.hand.iter() {
             println!("{}", card);
         }
     }
-    game::start_game(&dog, &mut players);
+    game::start_game(&mut dog, &mut players);
 }

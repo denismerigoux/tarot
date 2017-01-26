@@ -1,14 +1,21 @@
 use params;
 use deck;
 use card;
+use ai;
 
-type Heap = Vec<(card::Card, i32)>;
+pub type Heap = Vec<(card::Card, i32)>;
 
 #[derive(Clone)]
 pub struct Player {
     pub id: i32,
     pub name: String,
     pub hand: deck::Hand,
+}
+
+pub struct Game {
+    pub taker_id: i32,
+    pub attack_heap: Heap,
+    pub defense_heap: Heap,
 }
 
 // Empty the hands and names vector and creates a player vector instead
@@ -35,33 +42,105 @@ pub fn initialize_players(hands: &mut Vec<deck::Hand>, names: &mut Vec<String>) 
     players
 }
 
-pub fn start_game(_: &deck::Hand, mut players: &mut Vec<Player>) {
+pub fn start_game(mut dog: &mut deck::Hand, mut players: &mut Vec<Player>) {
     let cards_per_player = players[0].hand.len();
-    //Check if all players have same number of cards
+    // Check if all players have same number of cards
     for i in 1..params::NUMBER_OF_PLAYERS {
         if cards_per_player != players[i].hand.len() {
             panic!("the players don't have the same number of cards")
         }
     }
+
+    // Determine the attack and defense
+    let taker_id = ai::auctions(&players);
+    let mut game = Game {
+        taker_id: taker_id,
+        attack_heap: Vec::new(),
+        defense_heap: Vec::new(),
+    };
+    println!(">>>> {} prend le chien <<<<<",
+             match players.iter().find(|player| player.id == taker_id) {
+                 None => panic!("cannot find the player who won the round"),
+                 Some(player) => &player.name,
+             });
+
+    ai::exchange_dog(&mut players, &mut dog, &mut game);
+
     let mut starting_player_id = 0;
+    let mut fool_on_standby: Option<(card::Card, i32)> = None;
     println!("===== Début de la partie ! =====");
     for _ in 0..cards_per_player {
         // For each round of the game
         let mut cards_played: Heap = Vec::new();
         sort_by_playing_order(&mut players, starting_player_id);
         for player in players.iter_mut() {
-            // For each player
+            // Each player plays a card
             play_card(player, &mut cards_played)
         }
         // Decide who has won
         starting_player_id = winning_player(&mut cards_played);
-        let last_card_played = match cards_played.first() {
-            None => panic!("no card played this round"),
-            Some(card) => card,
-        };
-        println!(">>>>> Le joueur {} remporte le pli avec la carte {} ! <<<<<",
-                 last_card_played.1,
-                 last_card_played.0);
+        {
+            // Printing winner
+            let last_card_played = match cards_played.first() {
+                None => panic!("no card played this round"),
+                Some(card) => card,
+            };
+            println!(">>>>> {} remporte le pli avec la carte {} ! <<<<<",
+                     match players.iter().find(|player| player.id == last_card_played.1) {
+                         None => panic!("cannot find the player who won the round"),
+                         Some(player) => &player.name,
+                     },
+                     last_card_played.0);
+        }
+
+        // Before giving cards to the winner's heap, must first apply special rule for the fool
+        match fool_on_standby {
+            None => (),
+            Some(fool) => {
+                // The player who played the fool couldn't exchange cards in a prior tour,
+                // trying now to do so
+                cards_played.push(fool)
+            }
+        }
+        fool_on_standby = deal_with_fool(&mut cards_played, &mut game, starting_player_id);
+
+        // Giving cards to the winner's heap
+        if starting_player_id == game.taker_id {
+            game.attack_heap.append(&mut cards_played);
+        } else {
+            game.defense_heap.append(&mut cards_played);
+        }
+    }
+    // End of game
+    match fool_on_standby {
+        None => (),
+        Some((fool, id)) => {
+            // The player never could exchange his fool, we return it to him
+            if id == game.taker_id {
+                game.attack_heap.push((fool, id));
+            } else {
+                game.defense_heap.push((fool, id));
+            }
+        }
+    }
+
+    println!("-> Cartes gagnées par l'attaque");
+    for &(card, id) in game.attack_heap.iter() {
+        println!("{} ({})",
+                 card,
+                 match players.iter().find(|player| player.id == id) {
+                     None => panic!("cannot find the player who won the round"),
+                     Some(player) => &player.name,
+                 });
+    }
+    println!("-> Cartes gagnées par la défense");
+    for &(card, id) in game.defense_heap.iter() {
+        println!("{} ({})",
+                 card,
+                 match players.iter().find(|player| player.id == id) {
+                     None => panic!("cannot find the player who won the round"),
+                     Some(player) => &player.name,
+                 });
     }
 }
 
@@ -79,10 +158,10 @@ fn sort_by_playing_order(mut players: &mut Vec<Player>, starting_player_id: i32)
 
 fn play_card(player: &mut Player, cards_played: &mut Heap) {
     let valid_cards = valid_cards(&player, cards_played);
-    let card = select_card(player, &valid_cards, cards_played);
+    let card = ai::select_card(player, &valid_cards, cards_played);
     player.hand.remove(&card);
     cards_played.push((card, player.id));
-    println!("Le joueur {} joue {}.", player.id, card);
+    println!("{} joue {}.", player.name, card);
 }
 
 fn valid_cards(player: &Player, cards_played: &Heap) -> deck::Hand {
@@ -186,7 +265,7 @@ fn valid_cards(player: &Player, cards_played: &Heap) -> deck::Hand {
     }
 }
 
-// Returns the max trump in a heap of played cards, panics if no trump
+// Returns the max trump in a heap of played cards
 fn max_trump(cards_played: &Heap) -> Option<card::Trump> {
     let mut max_trump: Option<card::Trump> = None;
     for &(card, _) in cards_played.iter() {
@@ -207,14 +286,6 @@ fn max_trump(cards_played: &Heap) -> Option<card::Trump> {
     max_trump
 }
 
-// Select a card to play among the valid cards
-fn select_card(_: &Player, valid_cards: &deck::Hand, _: &Heap) -> card::Card {
-    match valid_cards.iter().next() {
-        None => panic!("no valid card to play"),
-        Some(card) => card.clone(),
-    }
-}
-
 // Determine who won the round
 fn winning_player(cards: &mut Heap) -> i32 {
     cards.sort_by(|&(card1, _), &(card2, _)| card2.cmp(&card1));
@@ -222,4 +293,80 @@ fn winning_player(cards: &mut Heap) -> i32 {
         Some(&(_, id)) => id,
         None => panic!("no cards have been played"),
     }
+}
+
+// Proceeds to exchange the fool against a lower card of the opponent's heap if necessary
+fn deal_with_fool(mut cards_played: &mut Heap,
+                  mut game: &mut Game,
+                  winning_player_id: i32)
+                  -> Option<(card::Card, i32)> {
+    let mut fool_index: Option<usize> = None;
+    let mut fool_on_standby: Option<(card::Card, i32)> = None;
+    for (index, &(card_played, _)) in cards_played.iter().enumerate() {
+        if card_played == card::Card::Fool {
+            fool_index = Some(index);
+            break;
+        }
+    }
+    match fool_index {
+        None => (),
+        Some(index) => {
+            let fool = cards_played.remove(index);
+            if fool.1 == game.taker_id && winning_player_id != game.taker_id {
+                // The attack played the fool and lost => exchange
+                let attack_copy = game.attack_heap.clone();
+                let card_to_exchange = attack_copy.iter()
+                    .enumerate()
+                    .filter(|&(_, &(card, _))| match card {
+                        card::Card::Trump(_) => false,
+                        card::Card::Face(card::Face { suit: _, symbol }) => {
+                            match symbol {
+                                card::Symbol::Jack | card::Symbol::Knight |
+                                card::Symbol::Queen | card::Symbol::King => false,
+                                _ => true,
+                            }
+                        }
+                        card::Card::Fool => false,
+                    })
+                    .next();
+                match card_to_exchange {
+                    Some((index, &card_to_exchange)) => {
+                        game.attack_heap.remove(index);
+                        game.defense_heap.push(card_to_exchange);
+                        game.attack_heap.push(fool);
+                    }
+                    None => fool_on_standby = Some(fool),
+                };
+            } else if fool.1 != game.taker_id && winning_player_id == game.taker_id {
+                // The defense played the fool and lost => exchange
+                let defense_copy = game.defense_heap.clone();
+                let card_to_exchange = defense_copy.iter()
+                    .enumerate()
+                    .filter(|&(_, &(card, _))| match card {
+                        card::Card::Trump(_) => false,
+                        card::Card::Face(card::Face { suit: _, symbol }) => {
+                            match symbol {
+                                card::Symbol::Jack | card::Symbol::Knight |
+                                card::Symbol::Queen | card::Symbol::King => false,
+                                _ => true,
+                            }
+                        }
+                        card::Card::Fool => false,
+                    })
+                    .next();
+                match card_to_exchange {
+                    Some((index, &card_to_exchange)) => {
+                        game.defense_heap.remove(index);
+                        game.attack_heap.push(card_to_exchange);
+                        game.defense_heap.push(fool);
+                    }
+                    None => fool_on_standby = Some(fool),
+                };
+            } else {
+                // Normal case, the fool shouldn't be exchanged
+                cards_played.insert(index, fool);
+            }
+        }
+    };
+    fool_on_standby
 }
