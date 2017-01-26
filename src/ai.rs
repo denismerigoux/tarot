@@ -7,7 +7,7 @@ pub fn auctions(players: &Vec<game::Player>) -> i32 {
     let potentials: Vec<(i32, i32)> = players.iter()
         .map(|ref player| (player.id, evaluate_hand_potential(&player.hand)))
         .collect();
-    let &(taker_id, _) = match potentials.iter().max_by_key(|&&(id, _)| id) {
+    let &(taker_id, _) = match potentials.iter().max_by_key(|&&(_, potential)| potential) {
         None => panic!("no players"),
         Some(x) => x,
     };
@@ -33,15 +33,15 @@ pub fn exchange_dog(mut players: &mut Vec<game::Player>,
         .iter()
         .fold((), |_, &card| {
             let to_exchange = match card {
-                card::Card::Trump(_) => true,
+                card::Card::Trump(_) => false,
                 card::Card::Face(card::Face { suit: _, symbol }) => {
                     match symbol {
                         card::Symbol::Jack | card::Symbol::Knight | card::Symbol::Queen |
-                        card::Symbol::King => true,
-                        _ => false,
+                        card::Symbol::King => false,
+                        _ => true,
                     }
                 }
-                card::Card::Fool => true,
+                card::Card::Fool => false,
             };
             if to_exchange {
                 // Performs the exchange
